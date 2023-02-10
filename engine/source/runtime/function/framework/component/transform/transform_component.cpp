@@ -34,6 +34,13 @@ namespace Piccolo
         m_is_dirty                                  = true;
     }
 
+    // void TransformComponent::setVisible(float new_visible)
+    // {
+    //     m_transform_buffer[m_next_index].m_visible = new_visible;
+    //     m_transform.m_visible = new_visible;
+    //     m_is_dirty = true;
+    // }
+
     void TransformComponent::tick(float delta_time)
     {
         std::swap(m_current_index, m_next_index);

@@ -17,6 +17,8 @@
 
 #include "runtime/function/render/rhi/vulkan/vulkan_rhi.h"
 
+// #include "iostream"
+
 namespace Piccolo
 {
     RenderSystem::~RenderSystem() {}
@@ -88,8 +90,44 @@ namespace Piccolo
                  .layout;
     }
 
+    // void RenderSystem::check(uint32_t ID, bool statue)
+    // {
+    //     for (auto iter = no_visible.begin(); iter != no_visible.end(); iter++)
+    //     {
+    //         if (*iter == ID)
+    //         {
+    //             if (statue == true)
+    //             {
+    //                 no_visible.erase(iter);
+    //                 return;
+    //             }
+    //         }
+    //     }
+    //     if (statue == false)
+    //     {
+    //         no_visible.push_back(ID);
+    //         m_render_scene->m_render_entities.clear();
+    //         return;
+    //     }
+    // }
+
+    // bool RenderSystem::checkInScene(uint32_t ID)
+    // {
+    //     for (auto iter = no_visible.begin(); iter != no_visible.end(); iter++)
+    //     {
+    //         if (*iter == ID) return false;
+    //     }
+    //     return true;
+    // }
+
     void RenderSystem::tick()
     {
+
+        // if (is_clear) m_render_scene->m_render_entities.clear();
+        // is_clear = false;
+
+        // check();
+
         // process swap data between logic and render contexts
         processSwapData();
 
@@ -225,6 +263,7 @@ namespace Piccolo
 
         // update game object if needed
         if (swap_data.m_game_object_resource_desc.has_value())
+        // if (true)
         {
             while (!swap_data.m_game_object_resource_desc->isEmpty())
             {
@@ -235,8 +274,13 @@ namespace Piccolo
                     const auto&      game_object_part = gobject.getObjectParts()[part_index];
                     GameObjectPartId part_id          = {gobject.getId(), part_index};
 
-                    bool is_entity_in_scene = m_render_scene->getInstanceIdAllocator().hasElement(part_id);
-
+                    bool is_entity_in_scene;
+                    // if (flag)
+                    {
+                       is_entity_in_scene = m_render_scene->getInstanceIdAllocator().hasElement(part_id);
+                    //    flag = false;
+                    }
+                    
                     RenderEntity render_entity;
                     render_entity.m_instance_id =
                         static_cast<uint32_t>(m_render_scene->getInstanceIdAllocator().allocGuid(part_id));
@@ -311,22 +355,70 @@ namespace Piccolo
                         m_render_resource->uploadGameObjectRenderResource(m_rhi, render_entity, material_data);
                     }
 
-                    // add object to render scene if needed
-                    if (!is_entity_in_scene)
+                    // std::cout << game_object_part.visible << std::endl;
+                    // std::cout << m_render_scene->m_render_entities.size() << std::endl;
+
+                    // bool is_visible = game_object_part.visible > 0.5f ? true : false;
+                    bool is_visible = game_object_part.visible;
+
+                    // // add object to render scene if needed
+                    // if (!is_entity_in_scene && is_visible)
+                    // {
+                    //     //添加物体到渲染场景
+                    //     m_render_scene->m_render_entities.push_back(render_entity);
+                    // }
+                    // else
+                    // {
+                    //     for (auto& entity : m_render_scene->m_render_entities)
+                    //     {
+                    //         if (entity.m_instance_id == render_entity.m_instance_id)
+                    //         {
+                    //             entity = render_entity;
+                    //             break;
+                    //         }
+                    //     }
+                    // }
+                    // cnt++;
+                    // if(cnt%31 == 0)
+                    // m_render_scene->m_render_entities.clear();
+                    // if (is_visible == false) is_clear = true;
+                    // check(render_entity.m_instance_id, is_visible);
+                    // if (!flag) is_entity_in_scene = checkInScene(render_entity.m_instance_id);
+                    // if (!is_entity_in_scene && is_visible)
+                    bool flag = true;
+                    if (is_visible)
                     {
+                        for (auto entity = m_render_scene->m_render_entities.begin(); entity != m_render_scene->m_render_entities.end(); )
+                        {
+                            if (entity->m_instance_id == render_entity.m_instance_id)
+                            {
+                                *entity = render_entity;
+                                flag = false;
+                                break;
+                            }
+                            else
+                            {
+                                entity++;
+                            }
+                        }
+                        if (flag)
                         m_render_scene->m_render_entities.push_back(render_entity);
                     }
                     else
                     {
-                        for (auto& entity : m_render_scene->m_render_entities)
+                        for (auto entity = m_render_scene->m_render_entities.begin(); entity != m_render_scene->m_render_entities.end(); )
                         {
-                            if (entity.m_instance_id == render_entity.m_instance_id)
+                            if (entity->m_instance_id == render_entity.m_instance_id)
                             {
-                                entity = render_entity;
-                                break;
+                                entity = m_render_scene->m_render_entities.erase(entity);
+                            }
+                            else
+                            {
+                                entity++;
                             }
                         }
                     }
+                    // m_render_scene->m_render_entities.clear();
                 }
                 // after finished processing, pop this game object
                 swap_data.m_game_object_resource_desc->popProcessObject();

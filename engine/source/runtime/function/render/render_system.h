@@ -61,6 +61,10 @@ namespace Piccolo
 
         void clearForLevelReloading();
 
+        void check(uint32_t ID, bool statue);
+
+        bool checkInScene(uint32_t ID);
+
     private:
         RENDER_PIPELINE_TYPE m_render_pipeline_type {RENDER_PIPELINE_TYPE::DEFERRED_PIPELINE};
 
@@ -71,6 +75,11 @@ namespace Piccolo
         std::shared_ptr<RenderScene>        m_render_scene;
         std::shared_ptr<RenderResourceBase> m_render_resource;
         std::shared_ptr<RenderPipelineBase> m_render_pipeline;
+
+        // int cnt = 0;
+        // bool is_clear = false;
+        // std::vector<uint32_t> no_visible;
+        // bool flag = true;
 
         void processSwapData();
     };

@@ -28,6 +28,8 @@ namespace Piccolo
 
         void setRotation(const Quaternion& new_rotation);
 
+        // void setVisible(float m_visible);
+
         const Transform& getTransformConst() const { return m_transform_buffer[m_current_index]; }
         Transform&       getTransform() { return m_transform_buffer[m_next_index]; }
 
@@ -40,6 +42,9 @@ namespace Piccolo
     protected:
         META(Enable)
         Transform m_transform;
+
+        // META(Enable)
+        // float m_visible = 1.0f;
 
         Transform m_transform_buffer[2];
         size_t    m_current_index {0};

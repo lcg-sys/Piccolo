@@ -22,5 +22,8 @@ namespace Piccolo
 
     public:
         std::vector<SubMeshRes> m_sub_meshes;
+
+        // float m_visible = 1.0f;
+        bool m_visible = true;
     };
 } // namespace Piccolo

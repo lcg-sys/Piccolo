@@ -296,6 +296,8 @@ namespace Piccolo
             MeshVertexDataDefinition* vertex_buffer_data =
                 reinterpret_cast<MeshVertexDataDefinition*>(mesh_data.m_static_mesh_data.m_vertex_buffer->m_data);
 
+            // MeshVertexDataDefinition* vertex_buffer_data = nullptr;
+
             VulkanMesh& now_mesh = res.first->second;
 
             if (mesh_data.m_skeleton_binding_buffer)

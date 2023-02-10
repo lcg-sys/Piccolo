@@ -65,6 +65,9 @@ namespace Piccolo
         bool                    m_with_animation {false};
         SkeletonBindingDesc     m_skeleton_binding_desc;
         SkeletonAnimationResult m_skeleton_animation_result;
+
+        // float visible;
+        bool visible;
     };
 
     constexpr size_t k_invalid_part_id = std::numeric_limits<size_t>::max();

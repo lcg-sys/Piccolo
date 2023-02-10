@@ -11,6 +11,8 @@
 #include "runtime/function/render/render_swap_context.h"
 #include "runtime/function/render/render_system.h"
 
+// #include "iostream"
+
 namespace Piccolo
 {
     void MeshComponent::postLoadResource(std::weak_ptr<GObject> parent_object)
@@ -52,6 +54,8 @@ namespace Piccolo
 
             meshComponent.m_transform_desc.m_transform_matrix = object_space_transform;
 
+            meshComponent.visible = m_mesh_res.m_visible;
+
             ++raw_mesh_count;
         }
     }
@@ -89,9 +93,16 @@ namespace Piccolo
 
                 mesh_part.m_transform_desc.m_transform_matrix =
                     transform_component->getMatrix() * object_transform_matrix;
+
+                mesh_part.visible = m_mesh_res.m_visible;
+
+                // std::cout << mesh_part.visible << std::endl;
+
                 dirty_mesh_parts.push_back(mesh_part);
 
                 mesh_part.m_transform_desc.m_transform_matrix = object_transform_matrix;
+
+
             }
 
             RenderSwapContext& render_swap_context = g_runtime_global_context.m_render_system->getSwapContext();
