@@ -4,6 +4,8 @@
 #include "runtime/function/framework/object/object.h"
 #include <runtime/engine.h>
 
+// #include "iostream"
+
 namespace Pilot
 {
     void AnimationComponent::postLoadResource(std::weak_ptr<GObject> parent_object)
@@ -157,6 +159,9 @@ namespace Pilot
             ratio = desired_ratio;
         }
         auto                       blendStateData = AnimationManager::getBlendStateWithClipData(*blend_state);
+
+        // std::cout << blendStateData.m_clip_count << std::endl;
+
         std::vector<AnimationPose> poses;
         for (int i = 0; i < blendStateData.m_clip_count; i++)
         {
