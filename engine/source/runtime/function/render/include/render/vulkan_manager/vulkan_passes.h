@@ -41,6 +41,20 @@ namespace Pilot
         void setupDescriptorSet();
     };
 
+    class PMyPass : public PRenderPassBase
+    {
+    public:
+        void initialize(VkRenderPass render_pass, VkImageView input_attachment);
+        void draw();
+
+        void updateAfterFramebufferRecreate(VkImageView input_attachment);
+
+    private:
+        void setupDescriptorSetLayout();
+        void setupPipelines();
+        void setupDescriptorSet();
+    };
+
     class PUIPass : public PRenderPassBase
     {
     public:
@@ -79,10 +93,11 @@ namespace Pilot
         _main_camera_pass_gbuffer_c               = 2,
         _main_camera_pass_backup_buffer_odd       = 3,
         _main_camera_pass_backup_buffer_even      = 4,
-        _main_camera_pass_depth                   = 5,
-        _main_camera_pass_swap_chain_image        = 6,
-        _main_camera_pass_custom_attachment_count = 5,
-        _main_camera_pass_attachment_count        = 7,
+        _main_camera_pass_backup_buffer_test      = 5,
+        _main_camera_pass_depth                   = 6,
+        _main_camera_pass_swap_chain_image        = 7,
+        _main_camera_pass_custom_attachment_count = 6,
+        _main_camera_pass_attachment_count        = 8,
     };
 
     enum
@@ -92,6 +107,7 @@ namespace Pilot
         _main_camera_subpass_forward_lighting,
         _main_camera_subpass_tone_mapping,
         _main_camera_subpass_color_grading,
+        _main_camera_subpass_my_pass,
         _main_camera_subpass_ui,
         _main_camera_subpass_combine_ui,
         _main_camera_subpass_count
@@ -138,6 +154,7 @@ namespace Pilot
 
         void draw(PColorGradingPass& color_grading_pass,
                   PToneMappingPass&  tone_mapping_pass,
+                  PMyPass&           my_pass,
                   PUIPass&           ui_pass,
                   PCombineUIPass&    combine_ui_pass,
                   uint32_t           current_swapchain_image_index,
@@ -146,6 +163,7 @@ namespace Pilot
         // legacy
         void drawForward(PColorGradingPass& color_grading_pass,
                          PToneMappingPass&  tone_mapping_pass,
+                         PMyPass&           my_pass,
                          PUIPass&           ui_pass,
                          PCombineUIPass&    combine_ui_pass,
                          uint32_t           current_swapchain_image_index,
